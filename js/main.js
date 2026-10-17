@@ -22,11 +22,12 @@
     $('[data-youtube-description]').textContent = c.youtubeDescription;
     $('#metric-note').textContent = `Public rounded counts, checked ${formatDate(c.youtubeSubscriberVerifiedAt)}. Not live metrics.`;
     $('#copyright-year').textContent = new Date().getFullYear();
-    if (c.profileImage) {
-      const image = $('.identity-art'); image.src = safeUrl(c.profileImage); image.alt = c.profileImageAlt;
-      image.style.borderRadius = '50% 50% 0 0'; image.style.objectFit = 'cover'; image.style.aspectRatio = '4 / 5';
-      $('.about-poster').replaceChildren(Object.assign(document.createElement('img'), { src: safeUrl(c.profileImage), alt: c.profileImageAlt, loading: 'lazy', width: 480, height: 600 }));
-    }
+    const heroImage = $('.identity-art');
+    $('.hero-art').classList.toggle('has-portrait', Boolean(c.profileImage));
+    heroImage.src = safeUrl(c.profileImage || 'assets/images/studio-art.svg');
+    heroImage.alt = c.profileImage ? c.profileImageAlt : 'Original TK monogram artwork in a terracotta arch';
+    heroImage.width = c.profileImage ? 768 : 800;
+    heroImage.height = c.profileImage ? 1376 : 1000;
     // Only a known final deployment URL is used in canonical/preview metadata.
     if (c.deploymentUrl && /^https:\/\//.test(c.deploymentUrl)) {
       const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link'); canonical.rel = 'canonical'; canonical.href = c.deploymentUrl; document.head.append(canonical);

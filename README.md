@@ -32,6 +32,7 @@ favicon.svg                Original TK mark
 build.mjs                  Optional static deployment packaging, Node built-ins only
 .openai/hosting.json       Sites identity and static output configuration
 tests/verify.py            Browser interaction and responsive regression checks
+tests/banner.py            Portrait loading, scroll motion and reduced-motion checks
 tests/accessibility-results.json  Recorded accessibility audit result
 ```
 
@@ -103,7 +104,7 @@ No external scripts, tracking, remote fonts or video iframes load on the initial
 
 ## Missing information and deliberate omissions
 
-- **Full-size personal portrait:** not supplied. The hero and About use original branded artwork, clearly distinguishable from a portrait. No unrelated person's stock photograph is presented as Kullayappa.
+- **Banner portrait:** supplied by the owner and stored unaltered as `assets/images/creator-portrait.jpg`. The hero uses an arch crop, scroll-linked parallax, gentle zoom and independently moving decorative details. Motion is lighter on mobile and disabled for reduced-motion preferences. About retains the original studio artwork. Change `profileImage` in config to replace the banner photo, or clear it to restore the TK illustration.
 - **Approved client testimonials:** not supplied. The site displays Client Stories Coming Soon. Add authentic records to `testimonials` with `{ clientName, businessName, quote, photo? }` to activate the controlled carousel.
 - **Independent audience demographics, results, client names, awards and years of experience:** not supplied and not claimed.
 - **Live subscriber/follower updates:** not implemented. Counts must be rechecked and updated with their dates. Automated YouTube updates require the YouTube Data API or another legitimate authorised source; secret credentials must remain on a secure server, never in frontend config.
@@ -127,6 +128,7 @@ To rerun the browser checks with an existing Python Playwright installation:
 ```powershell
 cd C:\MySocialMideaPortfolio
 python tech-kullayappa-portfolio/tests/verify.py
+python tech-kullayappa-portfolio/tests/banner.py
 ```
 
 The check starts and stops its own temporary local server. Playwright and Chromium are development tools only; the deployed site does not depend on them.

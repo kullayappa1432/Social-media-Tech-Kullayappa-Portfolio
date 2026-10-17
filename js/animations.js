@@ -1,6 +1,42 @@
 (() => {
   'use strict';
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
+  const banner = document.querySelector('.hero');
+  const portrait = document.querySelector('.hero-art.has-portrait');
+  if (banner && portrait) {
+    let frame = 0, current = 0, target = 0;
+    // All movement uses compositor transforms: the document layout stays stable.
+    function paint(progress) {
+      const mobile = innerWidth <= 600;
+      portrait.style.setProperty('--portrait-y', `${(progress * (mobile ? 14 : 28)).toFixed(2)}px`);
+      portrait.style.setProperty('--portrait-scale', (1.065 + progress * (mobile ? .035 : .075)).toFixed(4));
+      portrait.style.setProperty('--banner-y', `${(progress * (mobile ? -6 : -16)).toFixed(2)}px`);
+      portrait.style.setProperty('--banner-tilt', `${(progress * (mobile ? -.6 : -1.4)).toFixed(3)}deg`);
+      portrait.style.setProperty('--note-y', `${(progress * (mobile ? -10 : -28)).toFixed(2)}px`);
+      portrait.style.setProperty('--stamp-y', `${(progress * (mobile ? 6 : 14)).toFixed(2)}px`);
+    }
+    function animate() {
+      current += (target - current) * .13;
+      if (Math.abs(target - current) < .0005) current = target;
+      paint(current);
+      frame = current !== target ? requestAnimationFrame(animate) : 0;
+    }
+    function updateBanner() {
+      if (preference.matches) {
+        cancelAnimationFrame(frame); frame = 0; current = target = 0; paint(0); return;
+      }
+      const bounds = banner.getBoundingClientRect();
+      if (bounds.bottom <= 0 || bounds.top >= innerHeight) {
+        cancelAnimationFrame(frame); frame = 0; return;
+      }
+      target = Math.max(0, Math.min(1, -bounds.top / Math.max(1, bounds.height * .85)));
+      if (!frame) frame = requestAnimationFrame(animate);
+    }
+    window.addEventListener('scroll', updateBanner, { passive: true });
+    window.addEventListener('resize', updateBanner, { passive: true });
+    preference.addEventListener('change', updateBanner);
+    updateBanner();
+  }
   if (preference.matches || !('IntersectionObserver' in window)) return;
   document.body.classList.add('motion-ready');
   const reveals = [...document.querySelectorAll('.reveal')];

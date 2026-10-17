@@ -30,8 +30,8 @@ window.SITE_CONFIG = {
   ],
   whatsappNumber: '918919047894', // International digits only, e.g. country code followed by number. Do not add a fictional number.
   contactEmail: 'rallapallikullayappakullayappa@gmail.com', // Provided directly by the owner; also listed on the YouTube channel.
-  profileImage: '', // Supply your own licensed portrait. The default is an original branded SVG, not a stock person.
-  profileImageAlt: 'Tech Kullayappa, content creator',
+  profileImage: 'assets/images/creator-portrait.jpg', // Owner-supplied banner portrait; clear to use the original TK artwork.
+  profileImageAlt: 'Tech Kullayappa seated at a microphone in a warm creative studio',
   deploymentUrl: 'https://tech-kullayappa-creative-studio.russetscarf7.chatgpt.site/',
   services: [
     { title: 'Social Media Management', icon: 'grid', description: 'A considered presence, from the content calendar to the published post.' },
