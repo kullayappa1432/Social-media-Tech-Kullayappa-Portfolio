@@ -1,0 +1,99 @@
+/* Semantic theme colours keep illustration/brand colours independent. */
+:root {
+  color-scheme: light;
+  --page-bg: #F7EFE3;
+  --page-text: #332A21;
+  --page-surface: #F7EFE3;
+  --page-accent: #A64D2A;
+  --header-surface: rgba(247,239,227,.96);
+}
+.header-actions { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.theme-toggle {
+  display:grid; place-items:center; width:44px; height:44px; padding:0;
+  flex-shrink:0; border:1px solid var(--line); border-radius:50%;
+  color:var(--page-text); background:var(--page-surface);
+  transition:background .2s, border-color .2s;
+}
+.theme-toggle:hover { border-color:var(--page-accent); }
+.theme-toggle .icon { width:18px; height:18px; }
+.theme-sun { display:none; }
+html[data-theme="dark"] {
+  color-scheme:dark;
+  --page-bg:#211C18;
+  --page-text:#F7EFE3;
+  --page-surface:#2D251F;
+  --page-accent:#E6AA88;
+  --header-surface:rgba(33,28,24,.97);
+  --muted:#C9B9A5;
+  --line:rgba(220,198,169,.24);
+  --community-art-opacity:.17;
+}
+[data-theme="dark"] .theme-moon { display:none; }
+[data-theme="dark"] .theme-sun { display:block; }
+[data-theme="dark"] body { background-color:var(--page-bg); color:var(--page-text); }
+[data-theme="dark"] .site-header { background:var(--header-surface); }
+[data-theme="dark"] .menu-toggle span { background:var(--page-text); }
+[data-theme="dark"] .monogram,
+[data-theme="dark"] .section-number,
+[data-theme="dark"] h2 em,
+[data-theme="dark"] .rust,
+[data-theme="dark"] .hero-community .script,
+[data-theme="dark"] .about-copy .signature,
+[data-theme="dark"] .service-top>.icon,
+[data-theme="dark"] .extra-service>span,
+[data-theme="dark"] .video-category,
+[data-theme="dark"] .phone-note,
+[data-theme="dark"] .editorial-tab[aria-selected="true"],
+[data-theme="dark"] .timeline li>span,
+[data-theme="dark"] .audience-grid i,
+[data-theme="dark"] .payment-mark,
+[data-theme="dark"] .estimate-result output,
+[data-theme="dark"] .quality-tabs button[aria-selected="true"],
+[data-theme="dark"] .field label span,
+[data-theme="dark"] .field-error,
+[data-theme="dark"] .form-status,
+[data-theme="dark"] .contact-flourish,
+[data-theme="dark"] #primary-nav>a.active,
+[data-theme="dark"] .filter:hover { color:var(--page-accent); }
+[data-theme="dark"] h1 em::after,
+[data-theme="dark"] .timeline li>span,
+[data-theme="dark"] .quality-tabs button[aria-selected="true"] { border-color:var(--page-accent); }
+[data-theme="dark"] .service-card,
+[data-theme="dark"] .service-card:nth-child(2),
+[data-theme="dark"] .service-card:nth-child(6),
+[data-theme="dark"] .price-card.individual,
+[data-theme="dark"] .estimate-card { background:var(--page-surface); }
+[data-theme="dark"] .service-card:hover { background:#362D25; }
+[data-theme="dark"] .instagram-section,
+[data-theme="dark"] .process,
+[data-theme="dark"] .pricing { background-color:rgba(220,198,169,.04); }
+[data-theme="dark"] .filter.active { color:var(--espresso); }
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea { color:var(--page-text); background-color:var(--page-surface); }
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color:var(--muted); opacity:1; }
+[data-theme="dark"] .quantity-control>button:hover { background:#45382D; }
+/* Light artwork and phone surfaces retain espresso ink for contrast. */
+[data-theme="dark"] .art-note,
+[data-theme="dark"] .about-poster,
+[data-theme="dark"] .expertise-panel,
+[data-theme="dark"] .quality-panel,
+[data-theme="dark"] .phone-frame,
+[data-theme="dark"] .phone-watch,
+[data-theme="dark"] .video-platform,
+[data-theme="dark"] .noscript-note { color:var(--espresso); }
+[data-theme="dark"] .about-poster,
+[data-theme="dark"] .expertise-panel,
+[data-theme="dark"] .quality-panel { --muted:#6c5d4e; --line:rgba(51,42,33,.18); }
+[data-theme="dark"] .philosophy h2 em { color:var(--sand); }
+[data-theme="dark"] .message-dialog { --muted:#6c5d4e; --line:rgba(51,42,33,.18); }
+[data-theme="dark"] .message-dialog h2 em { color:var(--rust); }
+[data-theme="dark"] .message-dialog textarea { color:var(--espresso); background:var(--cream); }
+@media(max-width:800px) {
+  .header-actions { gap:6px; }
+  [data-theme="dark"] #primary-nav { background:var(--page-bg); border-color:var(--line); }
+}
+@media(max-width:600px) {
+  html[data-theme="dark"] { --community-art-opacity:.13; }
+}

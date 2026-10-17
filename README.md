@@ -22,10 +22,12 @@ index.html                 All 22 requested sections, including the footer
 css/style.css              Palette, typography and desktop composition
 css/responsive.css         Tablet and mobile layouts, down to 320px
 css/animations.css         Entrance, marquee, stamp and reduced-motion rules
+css/themes.css             Light/dark palette, surfaces and header toggle
 js/config.js               Social accounts, metrics, videos, services and pricing
 js/main.js                 Navigation, estimator, forms, tabs, FAQs and reviews
 js/portfolio.js            Four media features, filters and click-to-load players
 js/animations.js           Scroll reveals, confirmed counters and subtle movement
+js/theme.js                Early theme selection, saved preference and toggle
 assets/images/             Original artwork, owned-account media and social preview
 assets/fonts/              Self-hosted fonts and their SIL Open Font Licenses
 assets/icons/              Original botanical illustration
@@ -36,6 +38,7 @@ build.mjs                  Optional static deployment packaging, Node built-ins 
 tests/verify.py            Browser interaction and responsive regression checks
 tests/banner.py            Portrait loading, scroll motion and reduced-motion checks
 tests/preview.py           Image visibility in direct-file and HTTP previews
+tests/themes.py            Theme persistence, system preference and responsive controls
 tests/accessibility-results.json  Recorded accessibility audit result
 ```
 
@@ -114,6 +117,8 @@ No external scripts, tracking, remote fonts or video iframes load on the initial
 
 ## Visual system and accessibility
 
+The header sun/moon control switches between the original warm cream light mode and an espresso dark mode. `js/theme.js` runs before styles paint, avoiding an incorrect-theme flash. It follows the device colour preference until a visitor chooses a theme, then stores that choice in `localStorage` under `tk-color-theme`. The setting persists across reloads and synchronises across tabs. When storage is blocked, the toggle still works for the current page. The control has a 44px target, keyboard support, an action label and `aria-pressed` state. Edit `css/themes.css` to tune either theme. Original brand/artwork colours remain separate from semantic page colours so photos, illustrations and cream cards retain readable text.
+
 The six requested colours are defined in `:root`: cream `#F7EFE3`, terracotta `#B6542D`, burnt rust `#A64D2A`, olive `#45482B`, sand `#DCC6A9`, espresso `#332A21`. Small cream text uses burnt rust surfaces because cream on the lighter terracotta is below the WCAG AA 4.5:1 threshold. Terracotta remains an illustration and accent colour.
 
 Cormorant Garamond, DM Sans and Dancing Script are self-hosted with their original licenses. Cormorant and DM Sans use Latin subsets in WOFF; Dancing Script retains the original downloaded font. Browser-synthesised italics and heavier weights avoid extra font downloads. The design includes semantic landmarks, a skip link, focus styles, labelled form errors, keyboard tabs, native dialog focus handling, accessible accordion state, safe external links and reduced-motion support.
@@ -128,6 +133,8 @@ Player requests are stubbed only inside the regression test to verify click-to-l
 
 An **axe-core 4.10.3** automated WCAG A/AA/2.1 AA audit reported **zero automatic violations** at desktop and mobile widths; remaining contrast checks involving artwork require human review. See `tests/accessibility-results.json`. This is not a complete accessibility certification. Desktop and mobile screenshots were also inspected. Lighthouse has not been run, so no Lighthouse score is claimed.
 
+After the theme update, the automated accessibility audit also reported zero violations in both light and dark modes at 1440px and 375px; results are in `tests/theme-accessibility-results.json`. Theme-specific checks cover all six widths, keyboard operation, saved selection, system preference changes, cross-tab updates, blocked storage and direct-file previews.
+
 To rerun the browser checks with an existing Python Playwright installation:
 
 ```powershell
@@ -135,6 +142,7 @@ cd C:\MySocialMideaPortfolio
 python tech-kullayappa-portfolio/tests/verify.py
 python tech-kullayappa-portfolio/tests/banner.py
 python tech-kullayappa-portfolio/tests/preview.py
+python tech-kullayappa-portfolio/tests/themes.py
 ```
 
 The check starts and stops its own temporary local server. Playwright and Chromium are development tools only; the deployed site does not depend on them.

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#F7EFE3">
+  <script src="js/theme.js?v=20261017-theme"></script>
   <title>Tech Kullayappa — Content Creator & Social Media Studio</title>
   <meta name="description" content="Thoughtful reels, memorable stories and a consistent social presence. Explore Tech Kullayappa’s work, reel editing and social media packages.">
   <meta property="og:type" content="website">
@@ -25,6 +26,7 @@
   <link rel="stylesheet" href="css/style.css?v=20261017-background-motion">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/animations.css?v=20261017-background-motion">
+  <link rel="stylesheet" href="css/themes.css?v=20261017-theme">
   <script src="js/config.js" defer></script>
   <script src="js/portfolio.js?v=20261017-portrait-path" defer></script>
   <script src="js/main.js" defer></script>
@@ -47,14 +49,19 @@
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 5 10 8L22 5"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M21 11.5a9 9 0 0 1-13.5 7.8L3 21l1.7-5A9 9 0 1 1 21 11.5Z"/><path d="M8 7c-1 2 3 7 6 7l1-2-2-1-1 1-2-2 1-1-1-2Z"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 13A8.8 8.8 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
   </defs></svg>
 
   <header class="site-header" id="top">
     <div class="nav-wrap container">
       <a href="#home" class="brand" aria-label="Tech Kullayappa home"><span class="monogram" aria-hidden="true">T<span>K</span></span><span><strong data-brand>TECH KULLAYAPPA</strong><small data-tagline>CREATOR & SOCIAL STUDIO</small></span></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
       <nav id="primary-nav" aria-label="Main navigation"><a href="#home" class="active">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#work">My Work</a><a href="#social">Social Reach</a><a href="#packages">Packages</a><a href="#contact">Contact</a></nav>
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" hidden><span class="theme-moon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="theme-sun"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg></span></button>
       <a href="#contact" class="button button-small header-cta">Let’s Collaborate <svg class="icon"><use href="#i-up-right"/></svg></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open navigation"><span></span><span></span></button>
+      </div>
     </div>
   </header>
 
