@@ -26,15 +26,17 @@ css/responsive.css         Tablet and mobile layouts, down to 320px
 css/animations.css         Entrance, marquee, stamp and reduced-motion rules
 css/themes.css             Light/dark palette, surfaces and header toggle
 css/management.css         Monthly-service hierarchy, process panel and package layout
+css/splash.css             Full-screen intro, loading state and Skip control
 js/config.js               Social accounts, metrics, videos, services and pricing
 js/main.js                 Navigation, estimator, forms, tabs, FAQs and reviews
 js/portfolio.js            Four media features, filters and click-to-load players
 js/animations.js           Scroll reveals, confirmed counters and subtle movement
 js/theme.js                Early theme selection, saved preference and toggle
+js/splash.js               Intro autoplay, dismissal, fade and fail-open handling
 assets/images/             Original artwork, owned-account media and social preview
 assets/fonts/              Self-hosted fonts and their SIL Open Font Licenses
 assets/icons/              Original botanical illustration
-assets/videos/             Available for future owner-supplied local video files
+assets/videos/splash.mp4   Owner-supplied splash intro video
 favicon.svg                Original TK mark
 build.mjs                  Optional static deployment packaging, Node built-ins only
 .openai/hosting.json       Sites identity and static output configuration
@@ -43,6 +45,7 @@ tests/banner.py            Portrait loading, scroll motion and reduced-motion ch
 tests/preview.py           Image visibility in direct-file and HTTP previews
 tests/themes.py            Theme persistence, system preference and responsive controls
 tests/management.py        Monthly-plan hierarchy and service-specific enquiry routes
+tests/splash.py            Autoplay, Skip, natural end, failures and responsive intro
 tests/accessibility-results.json  Recorded accessibility audit result
 ```
 
@@ -169,3 +172,10 @@ node build.mjs
 It copies only runtime files to `dist/` using Node's built-in APIs. Sites uses the tracked identity in `.openai/hosting.json` and publishes `dist/`. Hosting access starts private; changing the audience is a separate owner decision.
 
 When moving to a custom domain, update `deploymentUrl`, the static canonical URL and `og:url`, and use absolute URLs for the social-preview image in Open Graph/Twitter metadata. The supplied social preview is `assets/images/social-preview.png` (1200×630). JavaScript updates metadata for configured URLs, but static crawler-facing tags should also be changed before deployment. Keep the canonical omitted if no final origin is known.
+
+
+## Splash intro
+
+`assets/videos/splash.mp4` is the supplied 52-second, portrait-format intro. Its exact path is in the `data-src` attribute on `#splash-video` in `index.html`; update that attribute to replace the video. The full frame fits within the viewport with `object-fit: contain`, without cropping or distortion. Olive space around portrait footage on wider screens is intentional. The player uses `autoplay`, `muted` and `playsinline`; no sound is enabled automatically.
+
+The intro opens once per document load in a full-screen modal, hiding and blocking interaction with the portfolio until Skip, Escape, completion or failure. It does not use the browser's Fullscreen API, so mobile playback stays inline and requires no fullscreen permission. Section links do not restart it; a new page load does. Skip pauses immediately and the overlay fades for 600ms. A cream-on-olive loading indicator covers loading/buffering, and 10 seconds without playback progress releases the site automatically. Playback errors and blocked autoplay also release the site. Reduced-motion preferences remove the fade and spinner animation. Without JavaScript, or if the intro script fails to load, the portfolio remains visible. The intro adds no wrappers or changes to existing sections, navigation or footer.

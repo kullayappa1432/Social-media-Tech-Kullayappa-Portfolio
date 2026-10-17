@@ -28,12 +28,21 @@
   <link rel="stylesheet" href="css/animations.css?v=20261017-background-motion">
   <link rel="stylesheet" href="css/themes.css?v=20261017-theme">
   <link rel="stylesheet" href="css/management.css?v=20261017-about-photo">
+  <link rel="stylesheet" href="css/splash.css?v=20261017-intro">
+  <script src="js/splash.js?v=20261017-intro"></script>
   <script src="js/config.js?v=20261017-about-photo" defer></script>
   <script src="js/portfolio.js?v=20261017-portrait-path" defer></script>
   <script src="js/main.js?v=20261017-about-photo" defer></script>
   <script src="js/animations.js?v=20261017-background-motion" defer></script>
 </head>
 <body>
+  <dialog id="splash-intro" class="splash-intro" aria-labelledby="splash-title" hidden>
+    <h2 id="splash-title" class="sr-only">Welcome to Tech Kullayappa</h2>
+    <video id="splash-video" class="splash-video" data-src="assets/videos/splash.mp4" autoplay muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
+    <div class="splash-brand" aria-hidden="true"><span class="splash-monogram">tk.</span><span>TECH KULLAYAPPA<small>DESIGNED FOR CREATIVITY</small></span></div>
+    <div id="splash-loading" class="splash-loading" role="status" aria-live="polite"><span class="splash-loader" aria-hidden="true"></span><span class="splash-loading-title">Setting the scene.</span><span class="splash-loading-note">A little creativity is on its way.</span></div>
+    <button id="splash-skip" class="splash-skip" type="button" autofocus>Skip to Website <span aria-hidden="true">&#8594;</span></button>
+  </dialog>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"></div>
   <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
