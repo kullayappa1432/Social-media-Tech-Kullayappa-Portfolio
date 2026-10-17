@@ -44,3 +44,51 @@
 .quality-visual[data-quality="1"] .sample-label,.quality-visual[data-quality="2"] .sample-label{color:var(--cream)}
 /* Closing credits */
 .footer{background:var(--espresso);color:var(--cream);padding-block:65px 20px}.footer-top{display:grid;grid-template-columns:1.9fr 1fr 1.25fr 1fr;gap:40px}.footer .brand strong{font-size:11px}.footer .brand small{font-size:6px;letter-spacing:1px}.footer .monogram{color:var(--sand)}.footer-brand>p{font-size:9px;color:var(--sand);margin-top:24px;line-height:2}.footer-top>div>h2{font-family:var(--sans);font-size:8px;letter-spacing:1.8px;text-transform:uppercase;margin-bottom:18px;font-weight:500}.footer-top>div>a:not(.brand){display:block;font-size:9px;color:var(--sand);padding-block:4px;min-height:28px}.footer-top>div>a:hover{color:var(--cream)}.footer-script{display:block;font-size:23px;color:var(--sand);margin-top:16px}.footer-display{font-family:var(--serif);color:transparent;-webkit-text-stroke:.6px rgba(220,198,169,.45);font-size:clamp(40px,7.6vw,115px);line-height:1;letter-spacing:-3px;white-space:nowrap;text-align:center;margin-top:60px;padding-bottom:33px;border-bottom:1px solid rgba(220,198,169,.2)}.footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:15px;font-size:7px;color:var(--sand)}.footer-bottom>.text-link{font-size:8px;min-height:34px}.footer-bottom>span>span{font-size:14px;margin-left:4px}.back-to-top,.floating-whatsapp{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border:1px solid var(--sand);background:var(--cream);color:var(--espresso);border-radius:50%;display:grid;place-items:center;font-size:20px;z-index:30;box-shadow:0 3px 14px rgba(51,42,33,.08)}.back-to-top{opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s}.back-to-top.visible{opacity:1;pointer-events:auto;transform:translateY(0)}.floating-whatsapp{background:var(--olive);color:var(--cream);bottom:76px}.message-dialog{background:var(--cream);color:var(--espresso);border:1px solid var(--sand);padding:40px;max-width:620px;width:calc(100% - 30px);max-height:90dvh;overflow:auto}.message-dialog::backdrop{background:rgba(51,42,33,.6);backdrop-filter:blur(4px)}.message-dialog h2{font-size:42px;margin-top:18px}.message-dialog>p:not(.eyebrow){font-size:11px;margin-top:18px}.message-dialog textarea{font-size:11px;line-height:1.7;margin-top:20px;max-height:35dvh}.dialog-close{position:absolute;right:10px;top:5px;width:44px;height:44px;font-size:29px}.dialog-actions{display:flex;gap:25px;align-items:center;margin-top:20px}.noscript-note{padding:20px;background:var(--sand);text-align:center}.noscript-note a{text-decoration:underline}
+
+/* Community artwork backdrop: the poster stays decorative, beneath all content. */
+:root {
+  --community-art: url('../assets/images/community-milestone-background.jpeg');
+  --community-art-opacity: .04;
+}
+body { isolation: isolate; }
+body::before { opacity: .012; }
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--community-art);
+  background-position: center 46%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: var(--community-art-opacity);
+  filter: grayscale(1) blur(.8px);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,.18), rgba(0,0,0,.55) 55%, #000);
+}
+.olive-section {
+  background-image: linear-gradient(rgba(69,72,43,.97), rgba(69,72,43,.97)), var(--community-art);
+  background-size: cover;
+  background-position: center;
+}
+.philosophy {
+  background-image: linear-gradient(rgba(166,77,42,.98), rgba(166,77,42,.98)), var(--community-art);
+  background-size: cover;
+  background-position: center;
+}
+.footer {
+  background-image: linear-gradient(rgba(51,42,33,.97), rgba(51,42,33,.97)), var(--community-art);
+  background-size: cover;
+  background-position: center bottom;
+}
+@media (max-width: 600px) {
+  :root { --community-art-opacity: .025; }
+  body::after { background-position: 54% center; }
+}
+
+/* Calm reading surfaces keep the collage out of detailed service/pricing copy. */
+.service-card,
+.service-card:nth-child(2),
+.service-card:nth-child(6),
+.price-card.individual { background: rgba(247,239,227,.88); }
+.service-card:hover { background: var(--cream); }
