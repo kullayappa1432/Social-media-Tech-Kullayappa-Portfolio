@@ -3,7 +3,17 @@
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
   const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${escape(name)}"/></svg>`;
   const safeUrl = (value, fallback = '') => {
-    try { const url = new URL(value, location.href); return ['https:', 'http:'].includes(url.protocol) ? url.href : fallback; }
+    if (typeof value !== 'string' || !value.trim()) return fallback;
+    try {
+      const url = new URL(value, location.href);
+      if (['https:', 'http:'].includes(url.protocol)) return url.href;
+      // Directly opening index.html uses file://. Permit relative project assets
+      // in that preview mode without accepting arbitrary file URLs or schemes.
+      const relative = !/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(value.trim());
+      const projectDirectory = new URL('.', location.href).href;
+      if (location.protocol === 'file:' && url.protocol === 'file:' && relative && url.href.startsWith(projectDirectory)) return url.href;
+      return fallback;
+    }
     catch { return fallback; }
   };
   const external = 'target="_blank" rel="noopener noreferrer"';

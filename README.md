@@ -13,6 +13,8 @@ python -m http.server 4173 --bind 127.0.0.1
 
 Open **http://127.0.0.1:4173**. Press Ctrl+C in that terminal to stop. You can also use any static web server. A server is recommended for clipboard support and accurate preview behaviour; no backend processes enquiries.
 
+Opening `index.html` directly also displays the portrait and bundled images. Relative asset paths are permitted for local `file://` previews; arbitrary file URLs and unsafe URL schemes remain blocked. If an already-open preview still shows an older version, refresh with Ctrl+F5.
+
 ## Files
 
 ```text
@@ -33,6 +35,7 @@ build.mjs                  Optional static deployment packaging, Node built-ins 
 .openai/hosting.json       Sites identity and static output configuration
 tests/verify.py            Browser interaction and responsive regression checks
 tests/banner.py            Portrait loading, scroll motion and reduced-motion checks
+tests/preview.py           Image visibility in direct-file and HTTP previews
 tests/accessibility-results.json  Recorded accessibility audit result
 ```
 
@@ -129,6 +132,7 @@ To rerun the browser checks with an existing Python Playwright installation:
 cd C:\MySocialMideaPortfolio
 python tech-kullayappa-portfolio/tests/verify.py
 python tech-kullayappa-portfolio/tests/banner.py
+python tech-kullayappa-portfolio/tests/preview.py
 ```
 
 The check starts and stops its own temporary local server. Playwright and Chromium are development tools only; the deployed site does not depend on them.
