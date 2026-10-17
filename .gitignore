@@ -1,0 +1,5 @@
+dist/
+tests/*.png
+tests/__pycache__/
+*.tar.gz
+*.zip

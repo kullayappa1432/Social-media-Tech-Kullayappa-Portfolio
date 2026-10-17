@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+ <defs><pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".6" fill="#332A21" opacity=".1"/></pattern><clipPath id="arch"><path d="M70 1000V375a330 330 0 0 1 660 0v625z"/></clipPath></defs>
+ <path d="M70 1000V375a330 330 0 0 1 660 0v625z" fill="#B6542D"/>
+ <g clip-path="url(#arch)"><circle cx="668" cy="257" r="205" fill="#DCC6A9"/><path d="M-40 710Q215 375 413 643T865 500V1050H-40Z" fill="#A64D2A"/><path d="M720 491Q545 610 597 1000H802V470Z" fill="#45482B"/>
+ <path d="M400 230v473M241 230h318M480 344v358M480 539l138-195M480 539l167 163" fill="none" stroke="#F7EFE3" stroke-width="5"/>
+ <path d="M400 242v448M250 242h300M490 356v337M490 540l130-184M490 540l150 153" fill="none" stroke="#F7EFE3" stroke-width="15"/>
+ <path d="M130 1000Q210 761 147 578" fill="none" stroke="#DCC6A9" stroke-width="2"/>
+ <g fill="#DCC6A9"><ellipse cx="151" cy="635" rx="12" ry="40" transform="rotate(-38 151 635)"/><ellipse cx="176" cy="706" rx="12" ry="39" transform="rotate(26 176 706)"/><ellipse cx="144" cy="738" rx="12" ry="42" transform="rotate(-52 144 738)"/><ellipse cx="175" cy="801" rx="12" ry="41" transform="rotate(35 175 801)"/><ellipse cx="128" cy="859" rx="12" ry="44" transform="rotate(-53 128 859)"/><ellipse cx="158" cy="902" rx="12" ry="42" transform="rotate(36 158 902)"/></g>
+ <path d="M110 375a290 290 0 0 1 580 0v580H110z" fill="none" stroke="#F7EFE3" stroke-width="1" opacity=".3"/>
+ <text x="400" y="790" text-anchor="middle" font-family="Georgia,serif" font-size="29" letter-spacing="7" fill="#F7EFE3">THE ART OF CONNECTION</text>
+ <text x="400" y="826" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" letter-spacing="5" fill="#F7EFE3">A TECH KULLAYAPPA ORIGINAL</text>
+ <path d="M400 885v45m-22-23h44" stroke="#F7EFE3" stroke-width="1"/>
+ <rect width="800" height="1000" fill="url(#grain)"/></g>
+</svg>
