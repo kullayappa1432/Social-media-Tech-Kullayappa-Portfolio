@@ -23,7 +23,18 @@ def ready(page):
     page.wait_for_function('document.getElementById("splash-video").currentTime > .1')
     check(page.locator('#splash-intro').evaluate('(el)=>el.open && el.matches(":modal")'), 'Intro is a modal above the portfolio')
     check(not page.locator('main').is_visible(), 'Portfolio stays hidden during intro')
-    check(page.locator('#splash-video').evaluate('(v)=>v.autoplay && v.playsInline && !v.loop && !v.paused'), 'Video autoplays inline, once')
+    check(page.locator('#splash-video').evaluate('(v)=>v.playsInline && !v.loop && !v.paused'), 'Video plays inline, once')
+
+
+def begin(page, touch=False):
+    page.wait_for_function('!document.getElementById("splash-start-screen").hidden || document.getElementById("splash-video").currentTime>.1')
+    if page.locator('#splash-start-screen').is_visible():
+        check(page.locator('#splash-video').evaluate('(v)=>v.paused && v.currentTime===0'), 'Blocked autoplay waits at the first frame instead of playing silently')
+        if touch:
+            page.locator('#splash-start').tap()
+        else:
+            page.locator('#splash-start').click()
+    ready(page)
 
 
 def released(page):
@@ -38,25 +49,31 @@ try:
         browser = p.chromium.launch(headless=True, args=['--autoplay-policy=document-user-activation-required'])
         page = browser.new_page(viewport={'width':1440, 'height':900})
         page.on('pageerror', lambda error: errors.append(str(error)))
+        page.add_init_script('''document.addEventListener('playing',e=>{
+            if(e.target.id==='splash-video' && !window.firstIntroFrame)
+                window.firstIntroFrame={muted:e.target.muted,time:e.target.currentTime};
+        },true);''')
         page.goto(base, wait_until='load')
-        ready(page)
-        check(page.locator('#splash-video').evaluate('(v)=>v.muted'), 'Restricted audible autoplay falls back to muted playback')
+        page.wait_for_selector('#splash-start-screen', state='visible')
+        check(page.locator('#splash-video').evaluate('(v)=>v.paused && v.currentTime===0'), 'Restricted autoplay holds the intro at time zero')
+        page.screenshot(path=str(ROOT/'tests/splash-sound-start.png'))
         page.evaluate('''()=>{
             const context = new AudioContext();
             const analyser = context.createAnalyser();
             context.createMediaElementSource(document.getElementById('splash-video')).connect(analyser);
             analyser.connect(context.destination);
             window.introAudioQA = { context, analyser };
-            document.getElementById('splash-sound').addEventListener('click', () => context.resume(), { once:true });
+            document.getElementById('splash-start').addEventListener('click', () => context.resume(), { once:true });
         }''')
-        page.locator('#splash-sound').click()
+        begin(page)
+        check(page.evaluate('firstIntroFrame.muted===false && firstIntroFrame.time<.3'), 'The first playback event has sound enabled from the beginning')
         page.wait_for_function('''()=>{
             const a = introAudioQA.analyser;
             const data = new Uint8Array(a.fftSize);
             a.getByteTimeDomainData(data);
             return data.some(x => Math.abs(x - 128) > 3);
         }''')
-        check(page.locator('#splash-video').evaluate('(v)=>!v.muted && v.volume===1 && !v.paused'), 'Enable Sound plays actual decoded audio after a click')
+        check(page.locator('#splash-video').evaluate('(v)=>!v.muted && v.volume===1 && !v.paused'), 'Play Intro with Sound produces actual decoded audio')
         check(page.locator('#splash-sound').get_attribute('aria-pressed') == 'true', 'Sound state is accessible and accurate')
         page.locator('#splash-sound').click()
         check(page.locator('#splash-video').evaluate('(v)=>v.muted && !v.paused'), 'Sound can be muted without stopping the intro')
@@ -88,8 +105,7 @@ try:
         mobile = browser.new_page(viewport={'width':375, 'height':812}, is_mobile=True, has_touch=True)
         mobile.on('pageerror', lambda error: errors.append(str(error)))
         mobile.goto(base, wait_until='load')
-        ready(mobile)
-        mobile.locator('#splash-sound').tap()
+        begin(mobile, touch=True)
         check(mobile.locator('#splash-video').evaluate('(v)=>!v.muted && !v.paused'), 'Mobile touch enables sound')
         mobile.screenshot(path=str(ROOT/'tests/splash-mobile.png'))
         mobile.locator('#splash-video').evaluate('(v)=>{v.playbackRate=16;}')
@@ -101,7 +117,7 @@ try:
         # Direct-file previews and reduced motion are supported too.
         local = browser.new_page(reduced_motion='reduce')
         local.goto((ROOT/'index.html').as_uri(), wait_until='load')
-        ready(local)
+        begin(local)
         local.keyboard.press('Escape')
         released(local)
         check(local.locator('#splash-intro').evaluate('(el)=>getComputedStyle(el).transitionDuration === "0s"'), 'Reduced motion removes the intro transition')
@@ -117,15 +133,19 @@ try:
         blocked = browser.new_page()
         blocked.add_init_script('HTMLMediaElement.prototype.play = function(){return Promise.reject(new DOMException("Autoplay blocked", "NotAllowedError"));}')
         blocked.goto(base, wait_until='load')
+        blocked.wait_for_selector('#splash-start-screen', state='visible')
+        check(blocked.locator('#splash-video').evaluate('(v)=>v.paused && v.currentTime===0'), 'Rejected autoplay never starts a silent intro')
+        blocked.locator('#splash-skip').click()
         released(blocked)
         blocked.close()
-        check(True, 'Rejected autoplay releases the website')
+        check(True, 'Skip works on the sound-start screen')
 
         # Hold the video request: loading remains elegant, and Skip needs no media.
         slow = browser.new_page()
         held = []
         slow.route('**/assets/videos/splash.mp4', lambda route: held.append(route))
         slow.goto(base, wait_until='domcontentloaded')
+        slow.locator('#splash-start').click()
         check(slow.locator('#splash-loading').is_visible(), 'Loading fallback is visible while media is pending')
         slow.screenshot(path=str(ROOT/'tests/splash-loading.png'))
         slow.locator('#splash-skip').click()
@@ -140,6 +160,7 @@ try:
         held_timeout = []
         timeout.route('**/assets/videos/splash.mp4', lambda route: held_timeout.append(route))
         timeout.goto(base, wait_until='domcontentloaded')
+        timeout.locator('#splash-start').click()
         released(timeout)
         for route in held_timeout:
             route.abort()
