@@ -2,6 +2,8 @@
 
 A complete, buildless portfolio in semantic HTML5, CSS3 and vanilla JavaScript. No framework, backend, package installation or runtime dependency is required. Fonts, original artwork, profile avatar and the four video thumbnails are included locally.
 
+The primary business offer is **monthly social media management personally handled by Kullayappa**: content planning, video editing, creative posts and publishing within the agreed scope. The page leads with that offer, the two monthly plans and the working process. Individual video editing and brand collaborations have separate enquiry cards. Creator biography, social reach and portfolio material support the service proposition further down the page.
+
 ## Run locally
 
 In PowerShell:
@@ -23,6 +25,7 @@ css/style.css              Palette, typography and desktop composition
 css/responsive.css         Tablet and mobile layouts, down to 320px
 css/animations.css         Entrance, marquee, stamp and reduced-motion rules
 css/themes.css             Light/dark palette, surfaces and header toggle
+css/management.css         Monthly-service hierarchy, process panel and package layout
 js/config.js               Social accounts, metrics, videos, services and pricing
 js/main.js                 Navigation, estimator, forms, tabs, FAQs and reviews
 js/portfolio.js            Four media features, filters and click-to-load players
@@ -39,6 +42,7 @@ tests/verify.py            Browser interaction and responsive regression checks
 tests/banner.py            Portrait loading, scroll motion and reduced-motion checks
 tests/preview.py           Image visibility in direct-file and HTTP previews
 tests/themes.py            Theme persistence, system preference and responsive controls
+tests/management.py        Monthly-plan hierarchy and service-specific enquiry routes
 tests/accessibility-results.json  Recorded accessibility audit result
 ```
 
@@ -68,6 +72,8 @@ Start with **`js/config.js`**. It is a regular deferred script exposing `window.
 Store replacement images in `assets/images/` and reference their relative paths. Rebuild deployment output after source changes. General narrative copy is in `index.html`; all repeating/configurable components are driven by config.
 
 The no-JavaScript fallback in `index.html` includes social and email links. If contact details change, update that fallback as well. Static `<head>` metadata and initial count/handle text should also match configuration for search crawlers and readers without JavaScript.
+
+Both monthly packages are rendered before individual reel editing; configuration order for the estimator is preserved. The hero's starting monthly price is calculated from configured monthly rates. The complete six-card creative-service list and four supporting services remain available in the expandable catalogue. Monthly-management, editing and collaboration links preselect the appropriate enquiry service without overwriting an existing project draft.
 
 ## Verified accounts and media
 
@@ -135,6 +141,8 @@ An **axe-core 4.10.3** automated WCAG A/AA/2.1 AA audit reported **zero automati
 
 After the theme update, the automated accessibility audit also reported zero violations in both light and dark modes at 1440px and 375px; results are in `tests/theme-accessibility-results.json`. Theme-specific checks cover all six widths, keyboard operation, saved selection, system preference changes, cross-tab updates, blocked storage and direct-file previews.
 
+After refocusing the site on monthly management, `tests/management.py` passed in both themes at all six widths. It checks the main offer, early placement of monthly plans, package priority, service-specific enquiry selections, the expandable catalogue and active navigation after section reordering. The expanded-catalogue accessibility audit reported zero automatic violations in both themes at 1440px and 375px; see `tests/management-accessibility-results.json`.
+
 To rerun the browser checks with an existing Python Playwright installation:
 
 ```powershell
@@ -143,6 +151,7 @@ python tech-kullayappa-portfolio/tests/verify.py
 python tech-kullayappa-portfolio/tests/banner.py
 python tech-kullayappa-portfolio/tests/preview.py
 python tech-kullayappa-portfolio/tests/themes.py
+python tech-kullayappa-portfolio/tests/management.py
 ```
 
 The check starts and stops its own temporary local server. Playwright and Chromium are development tools only; the deployed site does not depend on them.

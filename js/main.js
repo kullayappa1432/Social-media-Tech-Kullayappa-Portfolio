@@ -22,6 +22,8 @@
     $('[data-youtube-description]').textContent = c.youtubeDescription;
     $('#metric-note').textContent = `Public rounded counts, checked ${formatDate(c.youtubeSubscriberVerifiedAt)}. Not live metrics.`;
     $('#copyright-year').textContent = new Date().getFullYear();
+    const monthlyPlans = c.pricingPackages.filter(plan => plan.id !== 'individual');
+    if (monthlyPlans.length) $$('[data-monthly-start]').forEach(el => { el.textContent = currency(Math.min(...monthlyPlans.map(plan => plan.price))); });
     const heroImage = $('.identity-art');
     $('.hero-art').classList.toggle('has-portrait', Boolean(c.profileImage));
     heroImage.src = safeUrl(c.profileImage || 'assets/images/studio-art.svg');
@@ -37,7 +39,7 @@
       document.head.querySelector('meta[name="twitter:image"]').content = new URL('assets/images/social-preview.png', c.deploymentUrl).href;
     }
     const schema = document.createElement('script'); schema.type = 'application/ld+json';
-    schema.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: 'Tech Kullayappa', jobTitle: 'Content Creator & Social Media Creative', sameAs: [c.instagramProfileUrl, c.youtubeChannelUrl], ...(c.deploymentUrl ? { url: c.deploymentUrl } : {}) });
+    schema.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: 'Tech Kullayappa', jobTitle: 'Social Media Manager, Video Editor & Content Creator', sameAs: [c.instagramProfileUrl, c.youtubeChannelUrl], ...(c.deploymentUrl ? { url: c.deploymentUrl } : {}) });
     document.head.append(schema);
     if (whatsapp) {
       const floating = $('#floating-whatsapp'); floating.hidden = false; floating.href = enquiryUrl('Hi Tech Kullayappa! I’d like to discuss a creative project.');
@@ -72,8 +74,11 @@
       $('.back-to-top').classList.toggle('visible', y > 700);
       const available = document.documentElement.scrollHeight - innerHeight;
       $('.scroll-progress').style.width = `${available > 0 ? Math.min(100, y / available * 100) : 0}%`;
-      let active = 0;
-      sections.forEach((section, index) => { if (section && section.getBoundingClientRect().top <= 170) active = index; });
+      let active = 0, closest = -Infinity;
+      sections.forEach((section, index) => {
+        const top = section?.getBoundingClientRect().top;
+        if (top <= 170 && top > closest) { active = index; closest = top; }
+      });
       links.forEach((link, index) => {
         link.classList.toggle('active', index === active);
         if (index === active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
@@ -86,7 +91,9 @@
   function servicesAndPricing() {
     $('#services-grid').innerHTML = c.services.slice(0, 6).map((service, index) => `<article class="service-card"><div class="service-top">${icon(service.icon || 'spark')}<span>0${index + 1}</span></div><h3>${e(service.title)}</h3><p>${e(service.description)}</p><a class="text-link service-enquiry" href="#contact" data-service-name="${e(service.title)}">Let’s talk about it ↗</a></article>`).join('');
     $('#extra-services').innerHTML = c.services.slice(6).map((service, index) => `<div class="extra-service"><span>${String(index + 7).padStart(2, '0')}</span><strong>${e(service.title)}</strong><p>${e(service.description)}</p></div>`).join('');
-    $('#pricing-grid').innerHTML = c.pricingPackages.map(p => {
+    // Monthly management is the primary offer; keep per-reel editing as a secondary option.
+    const orderedPackages = [...c.pricingPackages].sort((a, b) => Number(a.id === 'individual') - Number(b.id === 'individual'));
+    $('#pricing-grid').innerHTML = orderedPackages.map(p => {
       const price = `${currency(p.price)}${p.maxPrice ? `–${currency(p.maxPrice)}` : ''}`;
       const message = `Hi Tech Kullayappa! I’m interested in the ${p.name} (${price} ${p.unit}). I’d like to discuss my brand, deliverables and the agreed scope. Please share the next steps.`;
       return `<article class="price-card ${e(p.id)}"><p class="eyebrow">${e(p.label)}</p><h3>${e(p.name)}</h3><div class="price-amount">${e(price)}<small>${e(p.unit)}</small></div><ul>${p.features.map(f => `<li>${icon('check')}<span>${e(f)}</span></li>`).join('')}</ul><a class="button" href="${e(enquiryUrl(message, p.name + ' enquiry'))}" ${whatsapp ? external : ''}>${e(p.cta)} ${icon('up-right')}</a><p class="fine-print">${e(p.note)}</p></article>`;
@@ -94,7 +101,7 @@
     $$('.service-enquiry').forEach(link => link.addEventListener('click', () => {
       const name = link.dataset.serviceName;
       const options = [...$('#service').options];
-      $('#service').value = options.find(option => option.value === name)?.value || (name.includes('Editing') ? 'Reel Editing' : name.includes('Promotional') ? 'Promotional Content' : name === 'Creator Collaborations' ? 'Brand Collaboration' : 'Other');
+      $('#service').value = options.find(option => option.value === name)?.value || (name.includes('Management') ? 'Social Media Management' : name.includes('Editing') ? 'Reel Editing' : name.includes('Promotional') ? 'Promotional Content' : name.includes('Collaboration') ? 'Brand Collaboration' : 'Other');
       if (!$('#details').value) $('#details').value = `I’d like to discuss ${name.toLowerCase()} for my brand.`;
     }));
   }

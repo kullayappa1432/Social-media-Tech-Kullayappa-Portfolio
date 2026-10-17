@@ -1,7 +1,7 @@
 /* Edit this file to update the studio. Never place API keys or passwords here. */
 window.SITE_CONFIG = {
   brandName: 'TECH KULLAYAPPA',
-  tagline: 'Creator & Social Studio',
+  tagline: 'Social Media Management',
   instagramProfileUrl: 'https://www.instagram.com/techkullayappa__ai_creator/',
   instagramUsername: 'techkullayappa__ai_creator',
   instagramDisplayName: 'TechKullayappa | AI Creator',
@@ -34,7 +34,7 @@ window.SITE_CONFIG = {
   profileImageAlt: 'Tech Kullayappa seated at a microphone in a warm creative studio',
   deploymentUrl: 'https://tech-kullayappa-creative-studio.russetscarf7.chatgpt.site/',
   services: [
-    { title: 'Social Media Management', icon: 'grid', description: 'A considered presence, from the content calendar to the published post.' },
+    { title: 'Monthly Social Media Management', icon: 'grid', description: 'I plan your content, edit videos, create posts and manage publishing each month, within our agreed scope.' },
     { title: 'Instagram Reel Editing', icon: 'film', description: 'Thoughtful cuts, clean captions and a rhythm that keeps the story moving.' },
     { title: 'YouTube Shorts Editing', icon: 'play', description: 'Big ideas, beautifully shaped for the small screen.' },
     { title: 'Promotional Content Creation', icon: 'spark', description: 'Put what makes your business different at the heart of the story.' },
@@ -66,7 +66,7 @@ window.SITE_CONFIG = {
     { name: 'The format', title: 'Made for where it lives.', text: 'Vertical framing, safe text areas and agreed export formats prepare your content for its destination.', word: 'Think outside the feed.' }
   ],
   faqs: [
-    ['What social media services do you offer?', 'Social media management, Instagram Reels and YouTube Shorts editing, promotional content, business campaigns, posters, captions, content planning, publishing and creator collaborations.'],
+    ['What do you manage in a monthly plan?', 'Monthly social media management is my main service. I personally handle content planning, video editing, creative posts and publishing within the selected package and agreed scope. We confirm the platforms, footage, approvals and deliverables together. Video editing and brand collaborations can also be discussed as separate projects.'],
     ['How much does an individual reel cost?', 'Individual reel editing is ₹500–₹1,000 per reel, depending on duration, editing complexity and creative requirements. The final format and deliverables are agreed before work begins.'],
     ['What is included in the ₹7,500 package?', 'The Basic Monthly Package includes 1 reel daily, up to 30 reels per month, video editing, captions and music, social media posting and posters. We confirm the platforms and exact scope together.'],
     ['What is included in the ₹15,000 package?', 'The Premium Monthly Package includes 2 reels daily, up to 60 reels per month, professional video editing, daily social media posting and promotional posters as mutually agreed.'],
