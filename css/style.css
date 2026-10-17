@@ -48,14 +48,14 @@
 /* Community artwork backdrop: the poster stays decorative, beneath all content. */
 :root {
   --community-art: url('../assets/images/community-milestone-background.jpeg');
-  --community-art-opacity: .04;
+  --community-art-opacity: .085;
 }
 body { isolation: isolate; }
 body::before { opacity: .012; }
 body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  inset: -40px 0;
   z-index: -1;
   pointer-events: none;
   background-image: var(--community-art);
@@ -63,8 +63,11 @@ body::after {
   background-size: cover;
   background-repeat: no-repeat;
   opacity: var(--community-art-opacity);
-  filter: grayscale(1) blur(.8px);
-  mask-image: linear-gradient(90deg, rgba(0,0,0,.18), rgba(0,0,0,.55) 55%, #000);
+  filter: grayscale(1) blur(.35px);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,.32), rgba(0,0,0,.75) 55%, #000);
+  transform: translate3d(0, var(--community-art-y, 0px), 0);
+  transition: transform .25s ease-out;
+  will-change: transform;
 }
 .olive-section {
   background-image: linear-gradient(rgba(69,72,43,.97), rgba(69,72,43,.97)), var(--community-art);
@@ -82,7 +85,7 @@ body::after {
   background-position: center bottom;
 }
 @media (max-width: 600px) {
-  :root { --community-art-opacity: .025; }
+  :root { --community-art-opacity: .065; }
   body::after { background-position: 54% center; }
 }
 

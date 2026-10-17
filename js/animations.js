@@ -1,6 +1,25 @@
 (() => {
   'use strict';
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
+  // A bounded drift follows scrolling throughout the long page without image
+  // seams or an endless animation loop when the visitor stops scrolling.
+  let backdropFrame = 0;
+  function updateBackdrop() {
+    if (preference.matches) {
+      document.body.style.setProperty('--community-art-y', '0px');
+      return;
+    }
+    if (backdropFrame) return;
+    backdropFrame = requestAnimationFrame(() => {
+      backdropFrame = 0;
+      const distance = preference.matches ? 0 : -Math.sin(scrollY / 1300) * (innerWidth <= 600 ? 18 : 32);
+      document.body.style.setProperty('--community-art-y', `${distance.toFixed(2)}px`);
+    });
+  }
+  window.addEventListener('scroll', updateBackdrop, { passive: true });
+  window.addEventListener('resize', updateBackdrop, { passive: true });
+  preference.addEventListener('change', updateBackdrop);
+  updateBackdrop();
   const banner = document.querySelector('.hero');
   const portrait = document.querySelector('.hero-art.has-portrait');
   if (banner && portrait) {
