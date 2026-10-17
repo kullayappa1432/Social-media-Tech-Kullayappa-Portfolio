@@ -23,7 +23,7 @@ def ready(page):
     page.wait_for_function('document.getElementById("splash-video").currentTime > .1')
     check(page.locator('#splash-intro').evaluate('(el)=>el.open && el.matches(":modal")'), 'Intro is a modal above the portfolio')
     check(not page.locator('main').is_visible(), 'Portfolio stays hidden during intro')
-    check(page.locator('#splash-video').evaluate('(v)=>v.autoplay && v.muted && v.playsInline && !v.loop && !v.paused'), 'Video autoplays muted and inline, once')
+    check(page.locator('#splash-video').evaluate('(v)=>v.autoplay && v.playsInline && !v.loop && !v.paused'), 'Video autoplays inline, once')
 
 
 def released(page):
@@ -35,16 +35,41 @@ def released(page):
 
 try:
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=True, args=['--autoplay-policy=document-user-activation-required'])
         page = browser.new_page(viewport={'width':1440, 'height':900})
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.goto(base, wait_until='load')
         ready(page)
+        check(page.locator('#splash-video').evaluate('(v)=>v.muted'), 'Restricted audible autoplay falls back to muted playback')
+        page.evaluate('''()=>{
+            const context = new AudioContext();
+            const analyser = context.createAnalyser();
+            context.createMediaElementSource(document.getElementById('splash-video')).connect(analyser);
+            analyser.connect(context.destination);
+            window.introAudioQA = { context, analyser };
+            document.getElementById('splash-sound').addEventListener('click', () => context.resume(), { once:true });
+        }''')
+        page.locator('#splash-sound').click()
+        page.wait_for_function('''()=>{
+            const a = introAudioQA.analyser;
+            const data = new Uint8Array(a.fftSize);
+            a.getByteTimeDomainData(data);
+            return data.some(x => Math.abs(x - 128) > 3);
+        }''')
+        check(page.locator('#splash-video').evaluate('(v)=>!v.muted && v.volume===1 && !v.paused'), 'Enable Sound plays actual decoded audio after a click')
+        check(page.locator('#splash-sound').get_attribute('aria-pressed') == 'true', 'Sound state is accessible and accurate')
+        page.locator('#splash-sound').click()
+        check(page.locator('#splash-video').evaluate('(v)=>v.muted && !v.paused'), 'Sound can be muted without stopping the intro')
         for width, height in [(1440,900), (768,1024), (375,812), (320,568), (812,375)]:
             page.set_viewport_size({'width':width, 'height':height})
             check(page.locator('#splash-intro').evaluate('(el)=>{const r=el.getBoundingClientRect();return r.x===0 && r.y===0 && Math.abs(r.width-innerWidth)<1 && Math.abs(r.height-innerHeight)<1;}'), f'Splash fills {width}x{height}')
             check(page.locator('#splash-video').evaluate('(el)=>getComputedStyle(el).objectFit === "contain"'), 'Video preserves the complete frame without distortion')
             check(page.locator('#splash-skip').evaluate('(el)=>{const r=el.getBoundingClientRect();return r.x>=0 && r.y>=0 && r.right<=innerWidth && r.bottom<=innerHeight && r.height>=44;}'), 'Skip stays within the viewport with a usable touch target')
+            check(page.evaluate('''()=>{
+                const a=document.getElementById('splash-sound').getBoundingClientRect();
+                const b=document.getElementById('splash-skip').getBoundingClientRect();
+                return a.left>=0 && a.right<=b.left && a.bottom<=innerHeight && a.height>=44;
+            }'''), 'Sound and Skip controls remain separate and visible')
         page.set_viewport_size({'width':1440, 'height':900})
         page.screenshot(path=str(ROOT/'tests/splash-desktop.png'))
         page.locator('#splash-skip').click()
@@ -64,6 +89,8 @@ try:
         mobile.on('pageerror', lambda error: errors.append(str(error)))
         mobile.goto(base, wait_until='load')
         ready(mobile)
+        mobile.locator('#splash-sound').tap()
+        check(mobile.locator('#splash-video').evaluate('(v)=>!v.muted && !v.paused'), 'Mobile touch enables sound')
         mobile.screenshot(path=str(ROOT/'tests/splash-mobile.png'))
         mobile.locator('#splash-video').evaluate('(v)=>{v.playbackRate=16;}')
         released(mobile)
@@ -129,6 +156,14 @@ try:
             no_intro.close()
         check(not errors, f'No JavaScript errors during actual playback: {errors}')
         browser.close()
+        permitted = p.chromium.launch(headless=True, args=['--autoplay-policy=no-user-gesture-required'])
+        audible = permitted.new_page()
+        audible.goto(base, wait_until='load')
+        ready(audible)
+        check(audible.locator('#splash-video').evaluate('(v)=>!v.muted && !v.paused'), 'Sound starts automatically when browser policy permits')
+        audible.locator('#splash-skip').click()
+        released(audible)
+        permitted.close()
 finally:
     server.shutdown()
     server.server_close()

@@ -55,10 +55,17 @@ html.splash-pending body > :not(#splash-intro) { visibility:hidden; }
 .splash-loader { width:38px; height:38px; border:1px solid rgba(247,239,227,.25); border-top:2px solid #F7EFE3; border-right-color:#B6542D; border-radius:50%; animation:splash-spin 1.2s linear infinite; }
 .splash-loading-title { font:400 clamp(32px,5vw,48px)/1.1 var(--serif,serif); }
 .splash-loading-note { font-size:11px; letter-spacing:.5px; }
-.splash-skip {
+.splash-controls {
   position:absolute;
+  left:max(32px,env(safe-area-inset-left));
   right:max(32px,env(safe-area-inset-right));
   bottom:max(28px,env(safe-area-inset-bottom));
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.splash-skip {
   display:flex;
   align-items:center;
   gap:24px;
@@ -77,15 +84,39 @@ html.splash-pending body > :not(#splash-intro) { visibility:hidden; }
 .splash-skip span { font-size:20px; line-height:1; }
 .splash-skip:hover { background:#B6542D; border-color:#B6542D; color:#F7EFE3; }
 .splash-skip:focus-visible { outline:2px solid #F7EFE3; outline-offset:5px; }
+.splash-sound {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  min-height:50px;
+  padding:12px 18px;
+  border:1px solid rgba(247,239,227,.7);
+  border-radius:2px;
+  background:rgba(69,72,43,.94);
+  color:#F7EFE3;
+  font-size:11px;
+  font-weight:500;
+  white-space:nowrap;
+  transition:background .25s,border-color .25s;
+}
+.splash-sound svg { width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.splash-sound .sound-waves { display:none; }
+.splash-sound[aria-pressed="true"] .sound-waves { display:block; }
+.splash-sound[aria-pressed="true"] .sound-off { display:none; }
+.splash-sound:hover { background:#B6542D; border-color:#B6542D; }
+.splash-sound:focus-visible { outline:2px solid #F7EFE3; outline-offset:5px; }
 @keyframes splash-spin { to { transform:rotate(360deg); } }
 @media(max-width:600px) {
   .splash-brand { top:max(18px,env(safe-area-inset-top)); left:max(18px,env(safe-area-inset-left)); gap:10px; padding:6px 12px 8px; }
   .splash-monogram { font-size:39px; }
   .splash-brand>span+span { font-size:8px; letter-spacing:1.3px; }
   .splash-brand small { font-size:5px; letter-spacing:1px; }
-  .splash-skip { right:max(20px,env(safe-area-inset-right)); bottom:max(24px,env(safe-area-inset-bottom)); padding-inline:20px; gap:18px; }
+  .splash-controls { left:max(16px,env(safe-area-inset-left)); right:max(16px,env(safe-area-inset-right)); bottom:max(24px,env(safe-area-inset-bottom)); gap:8px; }
+  .splash-skip { padding-inline:12px; gap:12px; font-size:10px; }
+  .splash-sound { padding-inline:12px; gap:8px; font-size:10px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  #splash-intro,.splash-loading,.splash-skip { transition:none; }
+  #splash-intro,.splash-loading,.splash-skip,.splash-sound { transition:none; }
   .splash-loader { animation:none; }
 }

@@ -2,7 +2,8 @@
 (() => {
   'use strict';
   const root = document.documentElement;
-  let intro, video, loader, skip, watchdog, fadeTimer;
+  let intro, video, loader, skip, sound, watchdog, fadeTimer;
+  let playbackAttempt = 0;
   let finished = false;
   let closed = false;
   let returnFocus = false;
@@ -69,6 +70,33 @@
     watchdog = window.setTimeout(() => finish(), 10000);
   }
 
+  function updateSound() {
+    const enabled = !video.muted && video.volume > 0;
+    sound.setAttribute('aria-pressed', String(enabled));
+    sound.querySelector('[data-sound-label]').textContent = enabled ? 'Sound On' : 'Enable Sound';
+    sound.title = enabled ? 'Mute intro sound' : 'Enable intro sound';
+  }
+
+  function playIntro(withSound) {
+    if (finished) return;
+    const attempt = ++playbackAttempt;
+    video.muted = !withSound;
+    if (withSound) video.volume = 1;
+    updateSound();
+    const failed = error => {
+      // Ignore stale playback promises after a newer click or Skip.
+      if (finished || attempt !== playbackAttempt) return;
+      if (withSound && error.name === 'NotAllowedError') playIntro(false);
+      else finish();
+    };
+    try {
+      const playback = video.play();
+      if (playback && typeof playback.catch === 'function') playback.catch(failed);
+    } catch (error) {
+      failed(error);
+    }
+  }
+
   function start() {
     if (finished) return;
     try {
@@ -76,11 +104,14 @@
       video = document.getElementById('splash-video');
       loader = document.getElementById('splash-loading');
       skip = document.getElementById('splash-skip');
-      if (!intro || !video || !loader || !skip || typeof intro.showModal !== 'function') {
+      sound = document.getElementById('splash-sound');
+      if (!intro || !video || !loader || !skip || !sound || typeof intro.showModal !== 'function') {
         finish(true);
         return;
       }
       listen(skip, 'click', () => { returnFocus = true; finish(); });
+      listen(sound, 'click', () => playIntro(video.muted || video.volume === 0));
+      listen(video, 'volumechange', updateSound);
       listen(intro, 'cancel', event => { event.preventDefault(); returnFocus = true; finish(); });
       listen(intro, 'close', () => finish(true));
       listen(video, 'ended', () => finish());
@@ -106,8 +137,8 @@
       video.playsInline = true;
       video.src = video.dataset.src;
       armWatchdog();
-      const playback = video.play();
-      if (playback && typeof playback.catch === 'function') playback.catch(() => finish());
+      // Use sound when permitted; otherwise retain reliable muted autoplay.
+      playIntro(true);
     } catch {
       finish(true);
     }

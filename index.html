@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="css/animations.css?v=20261017-background-motion">
   <link rel="stylesheet" href="css/themes.css?v=20261017-theme">
   <link rel="stylesheet" href="css/management.css?v=20261017-about-photo">
-  <link rel="stylesheet" href="css/splash.css?v=20261017-intro">
-  <script src="js/splash.js?v=20261017-intro"></script>
+  <link rel="stylesheet" href="css/splash.css?v=20261017-sound">
+  <script src="js/splash.js?v=20261017-sound"></script>
   <script src="js/config.js?v=20261017-about-photo" defer></script>
   <script src="js/portfolio.js?v=20261017-portrait-path" defer></script>
   <script src="js/main.js?v=20261017-about-photo" defer></script>
@@ -41,7 +41,10 @@
     <video id="splash-video" class="splash-video" data-src="assets/videos/splash.mp4" autoplay muted playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
     <div class="splash-brand" aria-hidden="true"><span class="splash-monogram">tk.</span><span>TECH KULLAYAPPA<small>DESIGNED FOR CREATIVITY</small></span></div>
     <div id="splash-loading" class="splash-loading" role="status" aria-live="polite"><span class="splash-loader" aria-hidden="true"></span><span class="splash-loading-title">Setting the scene.</span><span class="splash-loading-note">A little creativity is on its way.</span></div>
-    <button id="splash-skip" class="splash-skip" type="button" autofocus>Skip to Website <span aria-hidden="true">&#8594;</span></button>
+    <div class="splash-controls">
+      <button id="splash-sound" class="splash-sound" type="button" aria-label="Intro sound" aria-pressed="false" title="Enable intro sound"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4Z"/><path class="sound-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="sound-off" d="m16 9 6 6m0-6-6 6"/></svg><span data-sound-label>Enable Sound</span></button>
+      <button id="splash-skip" class="splash-skip" type="button" autofocus>Skip to Website <span aria-hidden="true">&#8594;</span></button>
+    </div>
   </dialog>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="scroll-progress" aria-hidden="true"></div>
