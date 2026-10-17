@@ -30,6 +30,11 @@
     heroImage.alt = c.profileImage ? c.profileImageAlt : 'Original TK monogram artwork in a terracotta arch';
     heroImage.width = c.profileImage ? 768 : 800;
     heroImage.height = c.profileImage ? 1376 : 1000;
+    const aboutImage = $('.about-studio-image');
+    if (aboutImage && c.aboutImage) {
+      aboutImage.src = safeUrl(c.aboutImage);
+      aboutImage.alt = c.aboutImageAlt || aboutImage.alt;
+    }
     // Only a known final deployment URL is used in canonical/preview metadata.
     if (c.deploymentUrl && /^https:\/\//.test(c.deploymentUrl)) {
       const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link'); canonical.rel = 'canonical'; canonical.href = c.deploymentUrl; document.head.append(canonical);

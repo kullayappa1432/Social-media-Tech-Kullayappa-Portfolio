@@ -32,6 +32,8 @@ window.SITE_CONFIG = {
   contactEmail: 'rallapallikullayappakullayappa@gmail.com', // Provided directly by the owner; also listed on the YouTube channel.
   profileImage: 'assets/images/creator-portrait.jpg', // Owner-supplied banner portrait; clear to use the original TK artwork.
   profileImageAlt: 'Tech Kullayappa seated at a microphone in a warm creative studio',
+  aboutImage: 'assets/images/editing-studio.png',
+  aboutImageAlt: 'Tech Kullayappa editing a video at his laptop and studio monitor',
   deploymentUrl: 'https://tech-kullayappa-creative-studio.russetscarf7.chatgpt.site/',
   services: [
     { title: 'Monthly Social Media Management', icon: 'grid', description: 'I plan your content, edit videos, create posts and manage publishing each month, within our agreed scope.' },

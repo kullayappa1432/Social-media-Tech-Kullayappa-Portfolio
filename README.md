@@ -62,6 +62,7 @@ Start with **`js/config.js`**. It is a regular deferred script exposing `window.
 | WhatsApp | `whatsappNumber`, international digits only: currently `918919047894` |
 | Business email | `contactEmail`: currently `rallapallikullayappakullayappa@gmail.com` |
 | Owner portrait | `profileImage`, `profileImageAlt` |
+| About studio photo | `aboutImage`, `aboutImageAlt` |
 | Service cards | `services` — first six primary, remaining four supporting |
 | Rates and package inclusions | `pricingPackages` |
 | Expertise and quality tabs | `expertise`, `quality` |
@@ -116,7 +117,8 @@ No external scripts, tracking, remote fonts or video iframes load on the initial
 
 ## Missing information and deliberate omissions
 
-- **Banner portrait:** supplied by the owner and stored unaltered as `assets/images/creator-portrait.jpg`. The hero uses an arch crop, scroll-linked parallax, gentle zoom and independently moving decorative details. Motion is lighter on mobile and disabled for reduced-motion preferences. About retains the original studio artwork. Change `profileImage` in config to replace the banner photo, or clear it to restore the TK illustration.
+- **Banner portrait:** supplied by the owner and stored unaltered as `assets/images/creator-portrait.jpg`. The hero uses an arch crop, scroll-linked parallax, gentle zoom and independently moving decorative details. Motion is lighter on mobile and disabled for reduced-motion preferences. Change `profileImage` in config to replace the banner photo, or clear it to restore the TK illustration.
+- **About studio photo:** the owner's supplied image is stored unaltered as `assets/images/editing-studio.png`. It replaces the About monogram artwork, shows its full composition on desktop and mobile, and loads lazily below the fold. Update `aboutImage` and `aboutImageAlt` in config to replace it independently of the banner portrait.
 - **Approved client testimonials:** not supplied. The site displays Client Stories Coming Soon. Add authentic records to `testimonials` with `{ clientName, businessName, quote, photo? }` to activate the controlled carousel.
 - **Independent audience demographics, results, client names, awards and years of experience:** not supplied and not claimed.
 - **Live subscriber/follower updates:** not implemented. Counts must be rechecked and updated with their dates. Automated YouTube updates require the YouTube Data API or another legitimate authorised source; secret credentials must remain on a secure server, never in frontend config.

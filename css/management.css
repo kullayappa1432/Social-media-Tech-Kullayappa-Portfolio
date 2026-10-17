@@ -130,6 +130,16 @@
   .price-card.individual>.button { align-self:stretch; }
   .price-card.individual>.fine-print { margin-top:14px; }
 }
+/* The owner's studio photo keeps its full composition at every screen size. */
+.about-poster.about-photo {
+  display:block;
+  min-height:0;
+  padding:0;
+  border:1px solid var(--line);
+}
+.about-poster.about-photo::before { display:none; }
+.about-studio-image { display:block; width:100%; height:auto; }
+
 @media(max-width:374px) {
   .hero-intro { font-size:6px; letter-spacing:1px; }
   .hero-buttons { gap:12px; }
